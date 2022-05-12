@@ -1,16 +1,29 @@
-const button = document.querySelector('button')!;
+class Department {
+    private name: string;
+    private employees: string[] = [];
 
-function addNum(n1: number, n2: number) {
-    if (n1 + n2 > 0) {
-        return n1 + n2;
+    constructor(n: string) {
+        this.name = n;
     }
-    return;
+
+    describe() {
+        console.log('Department: ' + this.name);
+    }
+
+    addEmployee(employee: string) {
+        this.employees.push(employee);
+    }
+
+    printEmployeeInformation() {
+        console.log(this.employees.length);
+        console.log(this.employees);
+    }
 }
 
-function clickHandler(message: string) {
-    console.log('Clicked! ' + message);
-}
+const accounting = new Department('Accounting');
 
-if (button) {
-    button.addEventListener('click', clickHandler.bind(null, "You're welcome"));
-}
+accounting.addEmployee('Max');
+accounting.addEmployee('Manu');
+
+accounting.describe();
+accounting.printEmployeeInformation();
