@@ -1,71 +1,46 @@
-class Department {
-    // private name: string;
-    protected employees: string[] = [];
-
-    constructor(private readonly id: string, public name: string) {
-        // this.name = n;
-    }
-
-    describe() {
-        console.log(`Department (${this.id}): ${this.name}`);
-    }
-
-    addEmployee(employee: string) {
-        this.employees.push(employee);
-    }
-
-    printEmployeeInformation() {
-        console.log(this.employees.length);
-        console.log(this.employees);
-    }
+// type AddFn = (a: number, b: number) => number;
+interface AddFn {
+    (a: number, b: number): number;
 }
 
-class ITDepartment extends Department {
-    admins: string[];
-    constructor(id: string, admins: string[]) {
-        super(id, 'IT');
-        this.admins = admins;
-    }
+let add: AddFn;
+
+add = (n1: number, n2: number) => {
+    return n1 + n2;
+};
+
+interface Named {
+    readonly name?: string;
+    outputName?: string;
 }
 
-class AccountingDepartment extends Department {
-    constructor(id: string, private reports: string[]) {
-        super(id, 'Account');
-    }
+interface Greetable extends Named {
+    greet(phrase: string): void;
+}
 
-    addEmployee(name: string): void {
-        if(name === 'Max') {
-            return;
+class Person implements Greetable {
+    name?: string;
+    age = 30;
+
+    constructor(n?: string) {
+        if (n) {
+            this.name = n;
         }
-
-        this.employees.push(name);
     }
 
-    addReport(text: string) {
-        this.reports.push(text);
-    }
-
-    printReport() {
-        console.log(this.reports);
+    greet(phrase: string) {
+        if (this.name) {
+            console.log(phrase + ' ' + this.name);
+        } else {
+            console.log('Hi');
+        }
     }
 }
 
-const it = new ITDepartment('id', ['Max']);
+let user1: Greetable;
 
-it.addEmployee('Max');
-it.addEmployee('Manu');
+user1 = new Person('Max');
 
-it.describe();
-it.printEmployeeInformation();
 
-console.log(it);
-
-const accounting = new AccountingDepartment('d2', []);
-
-accounting.addReport('Soomething went wrong...');
-
-accounting.addEmployee('Max');
-accounting.addEmployee('Manu');
-
-accounting.printReport();
-accounting.printEmployeeInformation();
+user1.greet('Hi there - I am');
+console.log(user1);
