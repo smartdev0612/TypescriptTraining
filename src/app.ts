@@ -2,59 +2,59 @@
 // Advanced Types
 //----------------------
 
-type Admin = {
-    name: string;
-    privileges: string[];
-};
+// type Admin = {
+//     name: string;
+//     privileges: string[];
+// };
 
-type Employee = {
-    name: string;
-    startDate: Date;
-};
+// type Employee = {
+//     name: string;
+//     startDate: Date;
+// };
 
 // interface ElevatedEmployee extends Employee, Admin {}
 
-type ElevatedEmployee = Admin & Employee;
+// type ElevatedEmployee = Admin & Employee;
 
-const e1: ElevatedEmployee = {
-    name: 'Max',
-    privileges: ['create-server'],
-    startDate: new Date()
-};
+// const e1: ElevatedEmployee = {
+//     name: 'Max',
+//     privileges: ['create-server'],
+//     startDate: new Date()
+// };
 
-type Combinable = string | number;
-type Numeric = number | boolean;
+// type Combinable = string | number;
+// type Numeric = number | boolean;
 
-type Universal = Combinable & Numeric;
+// type Universal = Combinable & Numeric;
 
-function add(a: number, b: number): number;
-function add(a: string, b: string): string;
-function add(a: number, b: string): string;
-function add(a: string, b: number): string;
-function add(a: Combinable, b: Combinable) {
-    if (typeof a === 'string' || typeof b === 'string') {
-        return a.toString() + b.toString();
-    }
-    return a + b;
-}
+// function add(a: number, b: number): number;
+// function add(a: string, b: string): string;
+// function add(a: number, b: string): string;
+// function add(a: string, b: number): string;
+// function add(a: Combinable, b: Combinable) {
+//     if (typeof a === 'string' || typeof b === 'string') {
+//         return a.toString() + b.toString();
+//     }
+//     return a + b;
+// }
 
-const result = add('Max', 'Schwarz') as string;
-result.split(' ');
+// const result = add('Max', 'Schwarz') as string;
+// result.split(' ');
 
-const fetchedUserData = {
-    id: 'u1',
-    name: 'Max',
-    job: { title: 'CEO', description: 'My own company' }
-};
+// const fetchedUserData = {
+//     id: 'u1',
+//     name: 'Max',
+//     job: { title: 'CEO', description: 'My own company' }
+// };
 
-// console.log(fetchedUserData.job && fetchedUserData.job.title);
-console.log(fetchedUserData?.job?.title);
+// // console.log(fetchedUserData.job && fetchedUserData.job.title);
+// console.log(fetchedUserData?.job?.title);
 
-const userInput = null;
+// const userInput = null;
 
-const storedData = userInput ?? 'DEFAULT';
+// const storedData = userInput ?? 'DEFAULT';
 
-console.log(storedData);
+// console.log(storedData);
 
 // type UnknownEmployee = Employee | Admin;
 
@@ -149,3 +149,26 @@ console.log(storedData);
 //     username: 'Must start with a capital character!'
 // };
 
+// ---------------------
+// Generics
+//----------------------
+
+// const names: Array<string> = [];
+// // names[0].split(' ');
+
+// const promise: Promise<string> = new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//         resolve('Hi there!');
+//     }, 2000);
+// });
+
+// promise.then(data => {
+//     data.split(' ');
+// });
+
+function merge<T extends object, U extends object>(objA: T, objB: U) {
+    return Object.assign(objA, objB);
+}
+
+const mergedObj = merge({name: 'Max', hobbies: ['Sports']}, {age: 30});
+console.log(mergedObj);
