@@ -22,7 +22,7 @@ interface Greetable extends Named {
     greet(phrase: string): void;
 }
 
-class Person implements Greetable {
+class PersonCls implements Greetable {
     name?: string;
     age = 30;
 
@@ -43,7 +43,7 @@ class Person implements Greetable {
 
 let user1: Greetable;
 
-user1 = new Person('Max');
+user1 = new PersonCls('Max');
 
 
 user1.greet('Hi there - I am');

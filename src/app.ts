@@ -166,61 +166,61 @@
 //     data.split(' ');
 // });
 
-function merge<T extends object, U extends object>(objA: T, objB: U) {
-    return Object.assign(objA, objB);
-}
+// function merge<T extends object, U extends object>(objA: T, objB: U) {
+//     return Object.assign(objA, objB);
+// }
 
-const mergedObj = merge({name: 'Max', hobbies: ['Sports']}, {age: 30});
-console.log(mergedObj);
+// const mergedObj = merge({name: 'Max', hobbies: ['Sports']}, {age: 30});
+// console.log(mergedObj);
 
-interface Lengthy {
-    length: number;
-}
+// interface Lengthy {
+//     length: number;
+// }
 
-function countAndDescribe<T extends Lengthy>(element: T) {
-    let descriptionText = "Got no value.";
-    if (element.length === 1) {
-        descriptionText = 'Got 1 element.';
-    } else if (element.length > 1) {
-        descriptionText = 'Got ' + element.length + ' elements.';
-    }
-    return [element, descriptionText];
-}
+// function countAndDescribe<T extends Lengthy>(element: T) {
+//     let descriptionText = "Got no value.";
+//     if (element.length === 1) {
+//         descriptionText = 'Got 1 element.';
+//     } else if (element.length > 1) {
+//         descriptionText = 'Got ' + element.length + ' elements.';
+//     }
+//     return [element, descriptionText];
+// }
 
-console.log(countAndDescribe(['Hi there!', 'cookie']));
+// console.log(countAndDescribe(['Hi there!', 'cookie']));
 
-function extractAndConvert<T extends object, U extends keyof T>(obj: T, key: U) {
-    return 'Value: ' + obj[key];
-}
+// function extractAndConvert<T extends object, U extends keyof T>(obj: T, key: U) {
+//     return 'Value: ' + obj[key];
+// }
 
-console.log(extractAndConvert({name: 'Max'}, 'name'));
+// console.log(extractAndConvert({name: 'Max'}, 'name'));
 
-class DataStorage<T extends string | number | boolean> {
-    private data: T[] = [];
+// class DataStorage<T extends string | number | boolean> {
+//     private data: T[] = [];
 
-    addItem(item: T) {
-        this.data.push(item);
-    }
+//     addItem(item: T) {
+//         this.data.push(item);
+//     }
 
-    removeItem(item: T) {
-        if (this.data.indexOf(item) === -1) {
-            return;
-        }
-        this.data.splice(this.data.indexOf(item), 1);
-    }
+//     removeItem(item: T) {
+//         if (this.data.indexOf(item) === -1) {
+//             return;
+//         }
+//         this.data.splice(this.data.indexOf(item), 1);
+//     }
 
-    getItems() {
-        return [...this.data];
-    }
-}
+//     getItems() {
+//         return [...this.data];
+//     }
+// }
 
-const textStorage = new DataStorage<string>();
-textStorage.addItem('Max');
-textStorage.addItem('Manu');
-textStorage.removeItem('Max');
-console.log(textStorage.getItems());
+// const textStorage = new DataStorage<string>();
+// textStorage.addItem('Max');
+// textStorage.addItem('Manu');
+// textStorage.removeItem('Max');
+// console.log(textStorage.getItems());
 
-const numberStorage = new DataStorage<number>();
+// const numberStorage = new DataStorage<number>();
 
 // const objectStorage = new DataStorage<object>();
 // const maxObj = {name: 'Max'};
@@ -230,24 +230,95 @@ const numberStorage = new DataStorage<number>();
 // objectStorage.removeItem({name: "Max"});
 // console.log(objectStorage);
 
-interface CourseGoal {
-    title: string;
-    description: string;
-    completeUntil: Date;
-}
+// interface CourseGoal {
+//     title: string;
+//     description: string;
+//     completeUntil: Date;
+// }
 
-function createCourseGoal(
-    title: string, 
-    description: string, 
-    date: Date
-): CourseGoal {
-    let courseGoal: Partial<CourseGoal> = {};
-    courseGoal.title = title;
-    courseGoal.description = description;
-    courseGoal.completeUntil = date;
-    return courseGoal as CourseGoal;
-}
+// function createCourseGoal(
+//     title: string, 
+//     description: string, 
+//     date: Date
+// ): CourseGoal {
+//     let courseGoal: Partial<CourseGoal> = {};
+//     courseGoal.title = title;
+//     courseGoal.description = description;
+//     courseGoal.completeUntil = date;
+//     return courseGoal as CourseGoal;
+// }
 
-const names: Readonly<string[]> = ['Max', 'Sports'];
+// const names: Readonly<string[]> = ['Max', 'Sports'];
 // names.push('Manu');
 // names.pop();
+
+
+// ---------------------
+// Decorator
+//----------------------
+
+function Logger(logString: string) {
+    console.log('LOGGER FACTORY');
+    return function(constructor: Function) {
+        console.log(logString);
+        console.log(constructor);
+    }
+    
+}
+
+function WithTemplate(template: string, hookId: string) {
+    console.log('TEMPLATE FACTORY');
+    return function(constructor: any) {
+        console.log('Rendering template');
+        const hookEl = document.getElementById(hookId);
+        const p = new constructor();
+        if (hookEl) {
+            hookEl.innerHTML = template;
+            hookEl.querySelector('h1')!.textContent = p.name;
+        }
+    }
+}
+
+@Logger('LOGGING')
+@WithTemplate('<h1>My Person Object</h1>', 'app')
+class Person {
+    name = 'Max';
+
+    constructor() {
+        console.log('Creating person object...');
+    }
+}
+
+const pers = new Person();
+
+console.log(pers);
+
+//------------
+
+function Log(target: any, propertyName: string | symbol) {
+    console.log('Property decorator!');
+    console.log(target, propertyName);
+}
+
+class Product {
+    @Log
+    title: string;
+    private _price: number;
+
+    set price(val: number) {
+        if(val > 0) {
+            this._price = val;
+        } else {
+            throw new Error('Invalid price - should be positive!');
+        }
+    }
+
+    constructor(t: string, p: number) {
+        this.title = t;
+        this._price = p;
+    }
+
+    getPriceWithTax(tax: number) {
+        return this._price * (1 + tax);
+    }
+}
