@@ -1,726 +1,377 @@
-// ---------------------
-// Advanced Types
-//----------------------
-
-// type Admin = {
-//     name: string;
-//     privileges: string[];
-// };
-
-// type Employee = {
-//     name: string;
-//     startDate: Date;
-// };
-
-// interface ElevatedEmployee extends Employee, Admin {}
-
-// type ElevatedEmployee = Admin & Employee;
-
-// const e1: ElevatedEmployee = {
-//     name: 'Max',
-//     privileges: ['create-server'],
-//     startDate: new Date()
-// };
-
-// type Combinable = string | number;
-// type Numeric = number | boolean;
-
-// type Universal = Combinable & Numeric;
-
-// function add(a: number, b: number): number;
-// function add(a: string, b: string): string;
-// function add(a: number, b: string): string;
-// function add(a: string, b: number): string;
-// function add(a: Combinable, b: Combinable) {
-//     if (typeof a === 'string' || typeof b === 'string') {
-//         return a.toString() + b.toString();
-//     }
-//     return a + b;
-// }
-
-// const result = add('Max', 'Schwarz') as string;
-// result.split(' ');
-
-// const fetchedUserData = {
-//     id: 'u1',
-//     name: 'Max',
-//     job: { title: 'CEO', description: 'My own company' }
-// };
-
-// // console.log(fetchedUserData.job && fetchedUserData.job.title);
-// console.log(fetchedUserData?.job?.title);
-
-// const userInput = null;
-
-// const storedData = userInput ?? 'DEFAULT';
-
-// console.log(storedData);
-
-// type UnknownEmployee = Employee | Admin;
-
-// function printEmployeeInformation(emp: UnknownEmployee) {
-//     console.log('Name: ' + emp.name);
-//     if ( 'privileges' in emp) {
-//         console.log('Privileges: ' + emp.privileges);
-//     }
-
-//     if ('startDate' in emp) {
-//         console.log('Start Date: ' + emp.startDate);
-//     }
-// }
-
-// printEmployeeInformation({name: 'Manu', startDate: new Date()});
-
-// class Car {
-//     drive() {
-//         console.log('Driving...');
-//     }
-// }
-
-// class Truck {
-//     drive() {
-//         console.log('Driving a truck...');
-//     }
-
-//     loadCargo(amount: number) {
-//         console.log('Loading cargo ...' + amount);
-//     }
-// }
-
-// type Vehicle = Car | Truck;
-
-// const v1 = new Car();
-// const v2 = new Truck();
-
-// function useVehicle(vehicle: Vehicle) {
-//     vehicle.drive();
-//     if ('loadCargo' in vehicle) {
-//         vehicle.loadCargo(1000);
-//     }
-// }
-
-// useVehicle(v1);
-// useVehicle(v2);
-
-// interface Bird {
-//     type: 'bird';
-//     flyingSpeed: number;
-// }
-
-// interface Horse {
-//     type: 'horse';
-//     runningSpeed: number;
-// }
-
-// type Animal = Bird | Horse;
-
-// function moveAnimal(animal: Animal) {
-//     let speed;
-//     switch (animal.type) {
-//         case 'bird':
-//             speed = animal.flyingSpeed;
-//             break;
-//         case 'horse':
-//             speed = animal.runningSpeed;
-//             break;
-//     }
-//     console.log('Moving at speed: ' + speed);
-// }
-
-// moveAnimal({type: 'bird', flyingSpeed: 10});
-
-// // const userInputElement = <HTMLInputElement>document.getElementById('message-input')!;
-// // const userInputElement = document.getElementById('message-input')! as HTMLInputElement;
-
-// // userInputElement.value = "Hi there!";
-
-// const userInputElement = document.getElementById('message_input');
-
-// if (userInputElement) {
-//     (userInputElement as HTMLInputElement).value = "Hi there!";
-// }
-
-// interface ErrorContainer {
-//     [prop: string]: string;
-// }
-
-// const errorBag: ErrorContainer = {
-//     email: 'Not a valid email!',
-//     username: 'Must start with a capital character!'
-// };
-
-// ---------------------
-// Generics
-//----------------------
-
-// const names: Array<string> = [];
-// // names[0].split(' ');
-
-// const promise: Promise<string> = new Promise((resolve, reject) => {
-//     setTimeout(() => {
-//         resolve('Hi there!');
-//     }, 2000);
-// });
-
-// promise.then(data => {
-//     data.split(' ');
-// });
-
-// function merge<T extends object, U extends object>(objA: T, objB: U) {
-//     return Object.assign(objA, objB);
-// }
-
-// const mergedObj = merge({name: 'Max', hobbies: ['Sports']}, {age: 30});
-// console.log(mergedObj);
-
-// interface Lengthy {
-//     length: number;
-// }
-
-// function countAndDescribe<T extends Lengthy>(element: T) {
-//     let descriptionText = "Got no value.";
-//     if (element.length === 1) {
-//         descriptionText = 'Got 1 element.';
-//     } else if (element.length > 1) {
-//         descriptionText = 'Got ' + element.length + ' elements.';
-//     }
-//     return [element, descriptionText];
-// }
-
-// console.log(countAndDescribe(['Hi there!', 'cookie']));
-
-// function extractAndConvert<T extends object, U extends keyof T>(obj: T, key: U) {
-//     return 'Value: ' + obj[key];
-// }
-
-// console.log(extractAndConvert({name: 'Max'}, 'name'));
-
-// class DataStorage<T extends string | number | boolean> {
-//     private data: T[] = [];
-
-//     addItem(item: T) {
-//         this.data.push(item);
-//     }
-
-//     removeItem(item: T) {
-//         if (this.data.indexOf(item) === -1) {
-//             return;
-//         }
-//         this.data.splice(this.data.indexOf(item), 1);
-//     }
-
-//     getItems() {
-//         return [...this.data];
-//     }
-// }
-
-// const textStorage = new DataStorage<string>();
-// textStorage.addItem('Max');
-// textStorage.addItem('Manu');
-// textStorage.removeItem('Max');
-// console.log(textStorage.getItems());
-
-// const numberStorage = new DataStorage<number>();
-
-// const objectStorage = new DataStorage<object>();
-// const maxObj = {name: 'Max'};
-// objectStorage.addItem({name: 'Max'});
-// objectStorage.addItem({name: 'Manu'});
-// // ...
-// objectStorage.removeItem({name: "Max"});
-// console.log(objectStorage);
-
-// interface CourseGoal {
-//     title: string;
-//     description: string;
-//     completeUntil: Date;
-// }
-
-// function createCourseGoal(
-//     title: string, 
-//     description: string, 
-//     date: Date
-// ): CourseGoal {
-//     let courseGoal: Partial<CourseGoal> = {};
-//     courseGoal.title = title;
-//     courseGoal.description = description;
-//     courseGoal.completeUntil = date;
-//     return courseGoal as CourseGoal;
-// }
-
-// const names: Readonly<string[]> = ['Max', 'Sports'];
-// names.push('Manu');
-// names.pop();
-
-
-// ---------------------
-// Decorator
-//----------------------
-/*
-function Logger(logString: string) {
-    console.log('LOGGER FACTORY');
-    return function(constructor: Function) {
-        console.log(logString);
-        console.log(constructor);
-    }
-    
-}
-
-function WithTemplate(template: string, hookId: string) {
-    console.log('TEMPLATE FACTORY');
-    return function<T extends {new(...args: any[]): {name: string}}>(originalConstructor: T) {
-        return class extends originalConstructor {
-            constructor(..._: any[]) {
-                super();
-                console.log("Rendering template");
-                const hookEl = document.getElementById(hookId);
-                if (hookEl) {
-                    hookEl.innerHTML = template;
-                    hookEl.querySelector('h1')!.textContent = this.name;
-                }
-            }
-        }
-    }
-}
-
-@Logger('LOGGING')
-@WithTemplate('<h1>My Person Object</h1>', 'app')
-class Person {
-    name = 'Max';
-
-    constructor() {
-        console.log('Creating person object...');
-    }
-}
-
-const pers = new Person();
-
-console.log(pers);
-
-//------------
-
-function Log(target: any, propertyName: string | symbol) {
-    console.log('Property decorator!');
-    console.log(target, propertyName);
-}
-
-function Log2(target: any, name: string, descriptor: PropertyDescriptor) {
-    console.log('Accessor decorator');
-    console.log(target);
-    console.log(name);
-    console.log(descriptor);
-}
-
-function Log3(target: any, name: string | Symbol, descriptor: PropertyDescriptor) {
-    console.log('Method decorator');
-    console.log(target);
-    console.log(name);
-    console.log(descriptor);
-}
-
-function Log4(target: any, name: string | Symbol, position: number) {
-    console.log('Parameter decorator');
-    console.log(target);
-    console.log(name);
-    console.log(position);
-}
-
-class Product {
-    @Log
-    title: string;
-    private _price: number;
-
-    @Log2
-    set price(val: number) {
-        if(val > 0) {
-            this._price = val;
-        } else {
-            throw new Error('Invalid price - should be positive!');
-        }
-    }
-
-    constructor(t: string, p: number) {
-        this.title = t;
-        this._price = p;
-    }
-
-    @Log3
-    getPriceWithTax(@Log4 tax: number) {
-        return this._price * (1 + tax);
-    }
-}
-
-const p1 = new Product('Book', 19);
-const p2 = new Product('Book 2', 29);
-
-function Autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
-    const originalMethod = descriptor.value;
-    const adjDescriptor: PropertyDescriptor = {
-        configurable: true,
-        enumerable: false,
-        get() {
-            const boundFn = originalMethod.bind(this);
-            return boundFn;
-        }
-    };
-    return adjDescriptor;
-}
-
-class Printer {
-    message = 'This works!';
-
-    @Autobind
-    showMessage() {
-        console.log(this.message);
-    }
-}
-
-const p = new Printer();
-
-const button = document.querySelector('button')!;
-button.addEventListener('click', p.showMessage);
-
-// -----
-
-interface ValidatorConfig {
-    [property: string]: {
-        [validatableProp: string]: string[] // ['required', 'positive']
-    }
-}
-
-const registeredValidators: ValidatorConfig = {};
-
-function Required(target: any, propName: string) {
-    registeredValidators[target.constructor.name] = {
-        ...registeredValidators[target.constructor.name],
-        [propName]: [...(registeredValidators[target.constructor.name]?.[propName] ?? []), 'required']
-    };
-}
-
-function PositiveNumber(target: any, propName: string) {
-    registeredValidators[target.constructor.name] = {
-        ...registeredValidators[target.constructor.name],
-        [propName]: [...(registeredValidators[target.constructor.name]?.[propName] ?? []), 'positive']
-    };
-}
-
-function validate(obj: any) {
-    const objValidatorConfig = registeredValidators[obj.constructor.name];
-    if (!objValidatorConfig) {
-        return true;
-    }
-    let isValid = true;
-    for (const prop in objValidatorConfig) {
-        console.log(prop);
-        for (const validator of objValidatorConfig[prop]) {
-            switch (validator) {
-                case 'required':
-                    isValid = isValid && !!obj[prop];
-                    break;
-                case 'positive':
-                    isValid = isValid && obj[prop] > 0;
-                    break;
-            }
-        }
-    }
-    return isValid;
-}
-
-class Course {
-    @Required
-    title: string;
-    @PositiveNumber
-    price: number;
-
-    constructor(t: string, p: number) {
-        this.title = t;
-        this.price = p;
-    }
-}
-
-const courseForm = document.querySelector('form')!;
-courseForm.addEventListener('submit', event => {
-    event.preventDefault();
-    const titleEl = document.getElementById('title') as HTMLInputElement;
-    const priceEl = document.getElementById('price') as HTMLInputElement;
-
-    const title = titleEl.value;
-    const price = +priceEl.value;
-
-    const createdCourse = new Course(title, price);
-
-    if (validate(createdCourse)) {
-        alert('Invalid input, please try again!');
-        return;
-    }
-    console.log(createdCourse);
-});
-*/
-
-enum ProjectStatus { 
-    Active, 
-    Finished 
-}
-
-// Project Type
-class Project {
+// Drag & Drop Interfaces
+interface Draggable {
+    dragStartHandler(event: DragEvent): void;
+    dragEndHandler(event: DragEvent): void;
+  }
+  
+  interface DragTarget {
+    dragOverHandler(event: DragEvent): void;
+    dropHandler(event: DragEvent): void;
+    dragLeaveHandler(event: DragEvent): void;
+  }
+  
+  // Project Type
+  enum ProjectStatus {
+    Active,
+    Finished
+  }
+  
+  class Project {
     constructor(
-        public id: string, 
-        public title: string, 
-        public description: string, 
-        public people: number, 
-        public status: ProjectStatus
+      public id: string,
+      public title: string,
+      public description: string,
+      public people: number,
+      public status: ProjectStatus
     ) {}
-}
-
-
-
-// Project State Management
-type Listener = (items: Project[]) => void;
-
-
-class ProjectState {
-    private listeners: Listener[] = [];
+  }
+  
+  // Project State Management
+  type Listener<T> = (items: T[]) => void;
+  
+  class State<T> {
+    protected listeners: Listener<T>[] = [];
+  
+    addListener(listenerFn: Listener<T>) {
+      this.listeners.push(listenerFn);
+    }
+  }
+  
+  class ProjectState extends State<Project> {
     private projects: Project[] = [];
     private static instance: ProjectState;
-
+  
     private constructor() {
-
+      super();
     }
-
+  
     static getInstance() {
-        if(this.instance) {
-            return this.instance;
-        }
-        this.instance = new ProjectState();
+      if (this.instance) {
         return this.instance;
+      }
+      this.instance = new ProjectState();
+      return this.instance;
     }
-
-    addListener(listenerFn: Listener) {
-        this.listeners.push(listenerFn);
-    }
-
+  
     addProject(title: string, description: string, numOfPeople: number) {
-        const newProject = new Project(
-            Math.random().toString(),
-            title,
-            description,
-            numOfPeople,
-            ProjectStatus.Active
-        );
-        this.projects.push(newProject);
-        for (const listenerFn of this.listeners) {
-            listenerFn(this.projects.slice());
-        }
+      const newProject = new Project(
+        Math.random().toString(),
+        title,
+        description,
+        numOfPeople,
+        ProjectStatus.Active
+      );
+      this.projects.push(newProject);
+      this.updateListeners();
     }
-}
-
-const projectState = ProjectState.getInstance();
-
-// Validation
-interface Validatable {
+  
+    moveProject(projectId: string, newStatus: ProjectStatus) {
+      const project = this.projects.find(prj => prj.id === projectId);
+      if (project && project.status !== newStatus) {
+        project.status = newStatus;
+        this.updateListeners();
+      }
+    }
+  
+    private updateListeners() {
+      for (const listenerFn of this.listeners) {
+        listenerFn(this.projects.slice());
+      }
+    }
+  }
+  
+  const projectState = ProjectState.getInstance();
+  
+  // Validation
+  interface Validatable {
     value: string | number;
     required?: boolean;
     minLength?: number;
     maxLength?: number;
     min?: number;
     max?: number;
-}
-
-function validate(validatableInput: Validatable) {
+  }
+  
+  function validate(validatableInput: Validatable) {
     let isValid = true;
     if (validatableInput.required) {
-        isValid = isValid && validatableInput.value.toString().trim().length !== 0;
+      isValid = isValid && validatableInput.value.toString().trim().length !== 0;
     }
     if (
-        validatableInput.minLength != null && 
-        typeof validatableInput.value === 'string'
+      validatableInput.minLength != null &&
+      typeof validatableInput.value === 'string'
     ) {
-        isValid = isValid && validatableInput.value.length >= validatableInput.minLength;
+      isValid =
+        isValid && validatableInput.value.length >= validatableInput.minLength;
     }
     if (
-        validatableInput.maxLength != null && 
-        typeof validatableInput.value === 'string'
+      validatableInput.maxLength != null &&
+      typeof validatableInput.value === 'string'
     ) {
-        isValid = isValid && validatableInput.value.length <= validatableInput.maxLength;
+      isValid =
+        isValid && validatableInput.value.length <= validatableInput.maxLength;
     }
     if (
-        validatableInput.min != null && 
-        typeof validatableInput.value === 'number'
+      validatableInput.min != null &&
+      typeof validatableInput.value === 'number'
     ) {
-        isValid = isValid && validatableInput.value >= validatableInput.min;
+      isValid = isValid && validatableInput.value >= validatableInput.min;
     }
     if (
-        validatableInput.max != null && 
-        typeof validatableInput.value === 'number'
+      validatableInput.max != null &&
+      typeof validatableInput.value === 'number'
     ) {
-        isValid = isValid && validatableInput.value <= validatableInput.max;
+      isValid = isValid && validatableInput.value <= validatableInput.max;
     }
     return isValid;
-}
-
-// autobind decorator
-function autobind(
-    _: any, 
-    _2: string, 
-    descriptor: PropertyDescriptor
-) {
+  }
+  
+  // autobind decorator
+  function autobind(_: any, _2: string, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value;
     const adjDescriptor: PropertyDescriptor = {
-        configurable: true,
-        get() {
-            const boundFn = originalMethod.bind(this);
-            return boundFn;
-        }
+      configurable: true,
+      get() {
+        const boundFn = originalMethod.bind(this);
+        return boundFn;
+      }
     };
     return adjDescriptor;
-}
-
-// ProjectList Class
-class ProjectList {
+  }
+  
+  // Component Base Class
+  abstract class Component<T extends HTMLElement, U extends HTMLElement> {
     templateElement: HTMLTemplateElement;
-    hostElement: HTMLDivElement;
-    element: HTMLElement;
+    hostElement: T;
+    element: U;
+  
+    constructor(
+      templateId: string,
+      hostElementId: string,
+      insertAtStart: boolean,
+      newElementId?: string
+    ) {
+      this.templateElement = document.getElementById(
+        templateId
+      )! as HTMLTemplateElement;
+      this.hostElement = document.getElementById(hostElementId)! as T;
+  
+      const importedNode = document.importNode(
+        this.templateElement.content,
+        true
+      );
+      this.element = importedNode.firstElementChild as U;
+      if (newElementId) {
+        this.element.id = newElementId;
+      }
+  
+      this.attach(insertAtStart);
+    }
+  
+    private attach(insertAtBeginning: boolean) {
+      this.hostElement.insertAdjacentElement(
+        insertAtBeginning ? 'afterbegin' : 'beforeend',
+        this.element
+      );
+    }
+  
+    abstract configure(): void;
+    abstract renderContent(): void;
+  }
+  
+  // ProjectItem Class
+  class ProjectItem extends Component<HTMLUListElement, HTMLLIElement>
+    implements Draggable {
+    private project: Project;
+  
+    get persons() {
+      if (this.project.people === 1) {
+        return '1 person';
+      } else {
+        return `${this.project.people} persons`;
+      }
+    }
+  
+    constructor(hostId: string, project: Project) {
+      super('single-project', hostId, false, project.id);
+      this.project = project;
+  
+      this.configure();
+      this.renderContent();
+    }
+  
+    @autobind
+    dragStartHandler(event: DragEvent) {
+      event.dataTransfer!.setData('text/plain', this.project.id);
+      event.dataTransfer!.effectAllowed = 'move';
+    }
+  
+    dragEndHandler(_: DragEvent) {
+      console.log('DragEnd');
+    }
+  
+    configure() {
+      this.element.addEventListener('dragstart', this.dragStartHandler);
+      this.element.addEventListener('dragend', this.dragEndHandler);
+    }
+  
+    renderContent() {
+      this.element.querySelector('h2')!.textContent = this.project.title;
+      this.element.querySelector('h3')!.textContent = this.persons + ' assigned';
+      this.element.querySelector('p')!.textContent = this.project.description;
+    }
+  }
+  
+  // ProjectList Class
+  class ProjectList extends Component<HTMLDivElement, HTMLElement>
+    implements DragTarget {
     assignedProjects: Project[];
-
+  
     constructor(private type: 'active' | 'finished') {
-        this.templateElement = document.getElementById('project-list')! as HTMLTemplateElement;
-        this.hostElement = document.getElementById('app')! as HTMLDivElement;
-        this.assignedProjects = [];
-
-        const importedNode = document.importNode(
-            this.templateElement.content, 
-            true
-        );
-        this.element = importedNode.firstElementChild as HTMLElement;
-        this.element.id = `${type}-projects`;
-
-        projectState.addListener((projects: Project[]) => {
-            const relevantProjects = projects.filter(prj => {
-                if (this.type === 'active') {
-                    return prj.status === ProjectStatus.Active;
-                }
-                return prj.status === ProjectStatus.Finished;
-            });
-            this.assignedProjects = relevantProjects;
-            this.renderProjects();
+      super('project-list', 'app', false, `${type}-projects`);
+      this.assignedProjects = [];
+  
+      this.configure();
+      this.renderContent();
+    }
+  
+    @autobind
+    dragOverHandler(event: DragEvent) {
+      if (event.dataTransfer && event.dataTransfer.types[0] === 'text/plain') {
+        event.preventDefault();
+        const listEl = this.element.querySelector('ul')!;
+        listEl.classList.add('droppable');
+      }
+    }
+  
+    @autobind
+    dropHandler(event: DragEvent) {
+      const prjId = event.dataTransfer!.getData('text/plain');
+      projectState.moveProject(
+        prjId,
+        this.type === 'active' ? ProjectStatus.Active : ProjectStatus.Finished
+      );
+    }
+  
+    @autobind
+    dragLeaveHandler(_: DragEvent) {
+      const listEl = this.element.querySelector('ul')!;
+      listEl.classList.remove('droppable');
+    }
+  
+    configure() {
+      this.element.addEventListener('dragover', this.dragOverHandler);
+      this.element.addEventListener('dragleave', this.dragLeaveHandler);
+      this.element.addEventListener('drop', this.dropHandler);
+  
+      projectState.addListener((projects: Project[]) => {
+        const relevantProjects = projects.filter(prj => {
+          if (this.type === 'active') {
+            return prj.status === ProjectStatus.Active;
+          }
+          return prj.status === ProjectStatus.Finished;
         });
-
-        this.attach();
-        this.renderContent();
+        this.assignedProjects = relevantProjects;
+        this.renderProjects();
+      });
     }
-
+  
+    renderContent() {
+      const listId = `${this.type}-projects-list`;
+      this.element.querySelector('ul')!.id = listId;
+      this.element.querySelector('h2')!.textContent =
+        this.type.toUpperCase() + ' PROJECTS';
+    }
+  
     private renderProjects() {
-        const listEl = document.getElementById(`${this.type}-projects-list`)! as HTMLUListElement;
-        listEl.innerHTML = '';
-        for (const prjItem of this.assignedProjects) {
-            const listItem = document.createElement('li');
-            listItem.textContent = prjItem.title;
-            listEl.appendChild(listItem);
-        }
+      const listEl = document.getElementById(
+        `${this.type}-projects-list`
+      )! as HTMLUListElement;
+      listEl.innerHTML = '';
+      for (const prjItem of this.assignedProjects) {
+        new ProjectItem(this.element.querySelector('ul')!.id, prjItem);
+      }
     }
-
-    private renderContent() {
-        const listId = `${this.type}-projects-list`;
-        this.element.querySelector('ul')!.id = listId;
-        this.element.querySelector('h2')!.textContent = 
-            this.type.toUpperCase() + ' PROJECTS';
-    }
-
-    private attach() {
-        this.hostElement.insertAdjacentElement('beforeend', this.element);
-    }
-}
-
-// ProjectInput Class
-class ProjectInput {
-    templateElement: HTMLTemplateElement;
-    hostElement: HTMLDivElement;
-    element: HTMLFormElement;
+  }
+  
+  // ProjectInput Class
+  class ProjectInput extends Component<HTMLDivElement, HTMLFormElement> {
     titleInputElement: HTMLInputElement;
     descriptionInputElement: HTMLInputElement;
     peopleInputElement: HTMLInputElement;
-
+  
     constructor() {
-        this.templateElement = document.getElementById('project-input')! as HTMLTemplateElement;
-        this.hostElement = document.getElementById('app')! as HTMLDivElement;
-
-        const importedNode = document.importNode(
-            this.templateElement.content, 
-            true
-        );
-        this.element = importedNode.firstElementChild as HTMLFormElement;
-        this.element.id = 'user-input';
-
-        this.titleInputElement = this.element.querySelector('#title') as HTMLInputElement;
-        this.descriptionInputElement = this.element.querySelector('#description') as HTMLInputElement;
-        this.peopleInputElement = this.element.querySelector('#people') as HTMLInputElement;
-
-        this.configure();
-        this.attach();
+      super('project-input', 'app', true, 'user-input');
+      this.titleInputElement = this.element.querySelector(
+        '#title'
+      ) as HTMLInputElement;
+      this.descriptionInputElement = this.element.querySelector(
+        '#description'
+      ) as HTMLInputElement;
+      this.peopleInputElement = this.element.querySelector(
+        '#people'
+      ) as HTMLInputElement;
+      this.configure();
     }
-
+  
+    configure() {
+      this.element.addEventListener('submit', this.submitHandler);
+    }
+  
+    renderContent() {}
+  
     private gatherUserInput(): [string, string, number] | void {
-        const enteredTitle = this.titleInputElement.value;
-        const enteredDescription = this.descriptionInputElement.value;
-        const enteredPeople = this.peopleInputElement.value;
-
-        const titleValidatable: Validatable = {
-            value: enteredTitle,
-            required: true
-        };
-
-        const descriptionValidatable: Validatable = {
-            value: enteredDescription,
-            required: true,
-            minLength: 5
-        };
-
-        const peopleValidatable: Validatable = {
-            value: +enteredPeople,
-            required: true,
-            min: 1,
-            max: 5
-        };
-
-        if (
-            !validate(titleValidatable) ||
-            !validate(descriptionValidatable) ||
-            !validate(peopleValidatable)
-        ) {
-            alert('Invalid input, please try again!');
-            return;
-        } else {
-            return [enteredTitle, enteredDescription, +enteredPeople];
-        }
+      const enteredTitle = this.titleInputElement.value;
+      const enteredDescription = this.descriptionInputElement.value;
+      const enteredPeople = this.peopleInputElement.value;
+  
+      const titleValidatable: Validatable = {
+        value: enteredTitle,
+        required: true
+      };
+      const descriptionValidatable: Validatable = {
+        value: enteredDescription,
+        required: true,
+        minLength: 5
+      };
+      const peopleValidatable: Validatable = {
+        value: +enteredPeople,
+        required: true,
+        min: 1,
+        max: 5
+      };
+  
+      if (
+        !validate(titleValidatable) ||
+        !validate(descriptionValidatable) ||
+        !validate(peopleValidatable)
+      ) {
+        alert('Invalid input, please try again!');
+        return;
+      } else {
+        return [enteredTitle, enteredDescription, +enteredPeople];
+      }
     }
-
+  
     private clearInputs() {
-        this.titleInputElement.value = '';
-        this.descriptionInputElement.value = '';
-        this.peopleInputElement.value = '';
+      this.titleInputElement.value = '';
+      this.descriptionInputElement.value = '';
+      this.peopleInputElement.value = '';
     }
-
+  
     @autobind
     private submitHandler(event: Event) {
-        event.preventDefault();
-        const userInput = this.gatherUserInput();
-        if (Array.isArray(userInput)) {
-            const [title, desc, people] = userInput;
-            projectState.addProject(title, desc, people);
-            this.clearInputs();
-        }
+      event.preventDefault();
+      const userInput = this.gatherUserInput();
+      if (Array.isArray(userInput)) {
+        const [title, desc, people] = userInput;
+        projectState.addProject(title, desc, people);
+        this.clearInputs();
+      }
     }
-
-    private configure() {
-        this.element.addEventListener('submit', this.submitHandler);
-    }
-
-    private attach() {
-        this.hostElement.insertAdjacentElement('afterbegin', this.element);
-    }
-}
-
-const prjInput = new ProjectInput();
-const activePrjList = new ProjectList('active');
-const finishedPrjList = new ProjectList('finished');
+  }
+  
+  const prjInput = new ProjectInput();
+  const activePrjList = new ProjectList('active');
+  const finishedPrjList = new ProjectList('finished');
+  
